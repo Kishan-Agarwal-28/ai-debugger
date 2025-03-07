@@ -37,10 +37,11 @@ router.route("/auth/oauth/google/callback").get(handleGoogleOauthCallback);
 router.route("/auth/oauth/github/callback").get(handleGithubOauthCallback);
 router.route("/auth/oauth/spotify/callback").get(handleSpotifyOauthCallback);
 router.route("/verify2FALogin").post(verify2FALogin)
+router.route("/forgotPassword").post(forgotPassword)
 //secured routes
 router.route("/logout").post(verifyJWT,logoutUser)
 router.route("/verify").post(verifyJWT,verifyUser)
-router.route("/forgotPassword").post(verifyJWT,forgotPassword)
+
 router.route("/changePassword").post(verifyJWT, changePassword)
 router.route("/resendVerificationToken").post(verifyJWT, resendVerificationToken)
 router.route("/changeEmail").post(verifyJWT, changeEmail)

@@ -1,8 +1,13 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { CheckCircle, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
+// Add these new imports
+import 'monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution';
+import 'monaco-editor/esm/vs/basic-languages/typescript/typescript.contribution';
+import 'monaco-editor/esm/vs/basic-languages/css/css.contribution';
+import 'monaco-editor/esm/vs/basic-languages/html/html.contribution';
+import 'monaco-editor/esm/vs/editor/contrib/suggest/browser/suggestController';
 
 // Monaco editor will be loaded dynamically
 interface EditorProps {
@@ -71,8 +76,51 @@ const CodeEditor: React.FC<EditorProps> = ({
         cursorBlinking: 'smooth',
         cursorSmoothCaretAnimation: 'on',
         padding: { top: 16, bottom: 16 },
+        // Add these new options for enhanced features
+        bracketPairColorization: {
+          enabled: true,
+        },
+        autoClosingBrackets: 'always',
+        autoClosingQuotes: 'always',
+        formatOnPaste: true,
+        formatOnType: true,
+        suggestOnTriggerCharacters: true,
+        quickSuggestions: {
+          other: true,
+          comments: true,
+          strings: true
+        },
+        parameterHints: {
+          enabled: true
+        },
+        suggest: {
+          showMethods: true,
+          showFunctions: true,
+          showConstructors: true,
+          showFields: true,
+          showVariables: true,
+          showClasses: true,
+          showStructs: true,
+          showInterfaces: true,
+          showModules: true,
+          showProperties: true,
+          showEvents: true,
+          showOperators: true,
+          showUnits: true,
+          showValues: true,
+          showConstants: true,
+          showEnums: true,
+          showEnumMembers: true,
+          showKeywords: true,
+          showWords: true,
+          showColors: true,
+          showFiles: true,
+          showReferences: true,
+          showFolders: true,
+          showTypeParameters: true,
+          showSnippets: true,
+        }
       });
-      
       // Track editor content changes
       newEditor.onDidChangeModelContent(() => {
         const newValue = newEditor.getValue();

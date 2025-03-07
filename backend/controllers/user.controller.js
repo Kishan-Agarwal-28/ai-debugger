@@ -199,7 +199,7 @@ const verifyUser= asyncHandler(async(req,res)=>{
 })
 const forgotPassword=asyncHandler(async(req,res)=>{
     const user=await User.findById(
-        req.user._id
+        $or[req.user.username,req.user.email]
     ).select("-password -refreshToken -verificationToken -verificationTokenExpiryDate");
     if(!user){
         throw new apiError(404,"User not found")
