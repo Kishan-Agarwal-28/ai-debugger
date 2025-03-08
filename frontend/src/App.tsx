@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+<<<<<<< HEAD
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import VerifyEmail from "./pages/VerifyEmail";
@@ -40,5 +40,12 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 );
+=======
+import LandingPage from "./pages/LandingPage";
+
+const queryClient = new QueryClient();
+
+const App = () => <LandingPage />;
+>>>>>>> 102eb995028d49674e2f5da15fe5f203bd57506d
 
 export default App;
