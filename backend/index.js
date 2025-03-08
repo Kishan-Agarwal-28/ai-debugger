@@ -5,9 +5,9 @@ import { verifyAUTH } from "./middlewares/auth.socket.middleware.js";
 import {handleUser} from "./controllers/dataPopulate.controller.js"
 connectDB();
 connectRedisDB();
-
-io.use(verifyAUTH)
-io.on("connection", (socket) => {
+const codeIo=io.of("/code")
+codeIo.use(verifyAUTH)
+codeIo.on("connection", (socket) => {
     console.log(`Socket connected: ${socket.id} , user: ${socket?.user?._id}`);
     handleUser(socket);
 })

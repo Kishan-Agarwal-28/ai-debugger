@@ -19,7 +19,6 @@ if (!globalThis.crypto) {
 const cookieOptions={
     httpOnly:true,
     secure:true,
-    sameSite:'strict'
 }
 const generateAccessTokenAndRefreshToken =async(user) => {
     const accessToken=await user.generateAccessToken();
@@ -28,72 +27,77 @@ const generateAccessTokenAndRefreshToken =async(user) => {
     await user.save({validateBeforeSave:false});
     return {accessToken,refreshToken};
 }
-const registerUser=asyncHandler(async(req,res)=>{
- const{username,email,password}=req.body;
-if([username,email,password].some((field)=>field?.trim()===""))
-{
-    throw new apiError(400,"All fields are required")
-}
-else if(password===email||password===username){
-    throw new apiError(400,"Password should not be same as username or email")
-}
-else{
-    const existingUser=await User.findOne({$or:[{email},{username}]});
-    console.log(existingUser)
-    if(existingUser && existingUser.oauth.providers.providerName===null){
-        if(existingUser.username===username && existingUser.isVerified==true){
-            throw new apiError(409,"User Username already taken")
-        }
-        throw new apiError(409,"User email already exists")
-    }
-    else if(existingUser && existingUser.oauth.providers.providerName!==null && existingUser.password){
-        throw new apiError(409,"User password already set please login")
-    }
-    else if(existingUser && existingUser.oauth.providers.providerName!==null && !existingUser.password){
-        const passwordSaved=await bcrypt.hash(password,20);
-        const updatedUser=await User.findByIdAndUpdate(existingUser._id,{
-            $set:{
-                password:passwordSaved,
-            }
-    }).select("-password -refreshToken");
-    if(!updatedUser){
-        throw new apiError(500,"User not updated something went wrong while updating the user")
-    }
-        return res.status(200).json(new apiResponse(200,updatedUser,"User updated successfully"))
-    }
-    else{
-        const verificationToken=nanoid(10);
-        const verificationTokenExpiryDate=Date.now()+VERIFICATIONTOKENEXPIRYTIME*1000;
-       const avatar=await uploadOnCloudinary(`https://ui-avatars.com/api/?name=${username.replace(' ','+')}&background=random&rounded=true&format=png&size=128`)
+const registerUser = asyncHandler(async (req, res) => {
+    const { username, email, password } = req.body;
+    if ([username, email, password].some((field) => field?.trim() === "")) {
+      throw new apiError(400, "All fields are required");
+    } else if (password === email || password === username) {
+      throw new apiError(400, "Password should not be the same as username or email");
+    } else {
+      const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+      console.log(existingUser);
       
-        const user=await User.create({
-            username,
-            email,
-            password,
-            verificationToken,
-            verificationTokenExpiryDate,
-            avatar:avatar.url,
-            
-        });
-       
-        const createdUser=await User.findById(user._id).select(
-            "-password -refreshToken "
-        );
-        if(!createdUser){
-            throw new apiError(500,"User not created something went wrong while registering the user")
+      if (existingUser) {
+        // Check if the user already exists with OAuth
+        if (existingUser.oauth.providers.providerName !== null) {
+          if (existingUser.password) {
+        //     throw new apiError(409, "User password already set, please login");
+          } else {
+            // Handle case where OAuth exists but no password has been set yet
+            const passwordSaved = await bcrypt.hash(password, 20);
+            const updatedUser = await User.findByIdAndUpdate(existingUser._id, {
+              $set: {
+                password: passwordSaved,
+              },
+            }).select("-password -refreshToken");
+  
+            if (!updatedUser) {
+              throw new apiError(500, "User not updated, something went wrong while updating the user");
+            }
+  
+            return res.status(200).json(new apiResponse(200, updatedUser, "User updated successfully"));
+          }
+        } else {
+          // If the user already exists but without OAuth
+          if (existingUser.username === username && existingUser.isVerified == true) {
+            throw new apiError(409, "User username already taken");
+          }
+          throw new apiError(409, "User email already exists");
         }
-        await sendEmail(createdUser.email, "verify", {
-            username: createdUser.username,
-            token: createdUser.verificationToken
+      } else {
+        // Create new user logic
+        const verificationToken = nanoid(10);
+        const verificationTokenExpiryDate = Date.now() + VERIFICATIONTOKENEXPIRYTIME * 1000;
+        const avatar = await uploadOnCloudinary(`https://ui-avatars.com/api/?name=${username.replace(' ', '+')}&background=random&rounded=true&format=png&size=128`);
+        
+        const user = await User.create({
+          username,
+          email,
+          password,
+          verificationToken,
+          verificationTokenExpiryDate,
+          avatar: avatar.url,
         });
-        const {accessToken,refreshToken}= await generateAccessTokenAndRefreshToken(user);
-       return res.status(200)
-       .cookie("accessToken",accessToken,cookieOptions)
-       .cookie("refreshToken",refreshToken,cookieOptions)
-       .json(new apiResponse(200,createdUser,"User registered successfully"))
+  
+        const createdUser = await User.findById(user._id).select("-password -refreshToken");
+        if (!createdUser) {
+          throw new apiError(500, "User not created, something went wrong while registering the user");
+        }
+  
+        await sendEmail(createdUser.email, "verify", {
+          username: createdUser.username,
+          token: createdUser.verificationToken,
+        });
+  
+        const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user);
+        return res.status(200)
+          .cookie("accessToken", accessToken, cookieOptions)
+          .cookie("refreshToken", refreshToken, cookieOptions)
+          .json(new apiResponse(200, createdUser, "User registered successfully"));
+      }
     }
-}
-})
+  });
+  
 const loginUser=asyncHandler(async(req,res)=>{
     const{email,password}=req.body;
     if([email,password].some((field)=>field?.trim()===""))

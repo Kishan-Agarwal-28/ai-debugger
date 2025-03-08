@@ -6,7 +6,7 @@ export const generateEmailTemplates = (username, token, email = "", reason = "")
 
     switch (reason) {
         case "verify":
-            link = `${APPURL}/auth/verify/?token=${token}`;
+            link = `${APPURL}/verify-email?token=${token}`;
             html = `
 <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4;">
     <table width="100%" cellspacing="0" cellpadding="0">

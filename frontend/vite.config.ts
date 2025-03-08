@@ -19,4 +19,13 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  define: {
+    // Add this section to define process.env
+    'process.env': {
+      NODE_ENV: JSON.stringify(mode),
+      // Add any other environment variables Excalidraw might need
+      REACT_APP_BACKEND_V2_GET_URL: JSON.stringify(process.env.REACT_APP_BACKEND_V2_GET_URL || ''),
+      REACT_APP_BACKEND_V2_POST_URL: JSON.stringify(process.env.REACT_APP_BACKEND_V2_POST_URL || ''),
+    }
+  },
 }));
