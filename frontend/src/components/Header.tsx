@@ -1,15 +1,9 @@
-<<<<<<< HEAD
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Terminal, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-=======
-import React from "react";
-import { cn } from "@/lib/utils";
-import { Terminal } from "lucide-react";
->>>>>>> 102eb995028d49674e2f5da15fe5f203bd57506d
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -23,17 +17,10 @@ const Header: React.FC = () => {
       <div className="container flex items-center justify-between h-14 px-4 md:px-6 animate-fadeIn">
         <div className="flex items-center gap-2">
           <Terminal className="h-5 w-5 text-code-blue" />
-<<<<<<< HEAD
           <Link to="/" className="font-semibold text-lg tracking-tight">CodeClarity</Link>
-=======
-          <span className="font-semibold text-lg tracking-tight">
-            DebugEase
-          </span>
->>>>>>> 102eb995028d49674e2f5da15fe5f203bd57506d
         </div>
-
+        
         <nav className="flex items-center gap-4">
-<<<<<<< HEAD
           <Link 
             to="/app" 
             className={cn(
@@ -47,52 +34,21 @@ const Header: React.FC = () => {
             href="https://github.com" 
             target="_blank" 
             rel="noopener noreferrer" 
-=======
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
->>>>>>> 102eb995028d49674e2f5da15fe5f203bd57506d
             className={cn(
               "text-sm font-medium transition-colors",
               "hover:text-primary opacity-70 hover:opacity-100"
             )}
           >
-            Sign in
+            GitHub
           </a>
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              "text-sm font-medium transition-colors",
-              "hover:text-primary opacity-70 hover:opacity-100",
-              "px-4 py-2"
-            )}
-          >
-            Sign up
-          </a>
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              "text-sm font-medium transition-colors",
-              "hover:text-primary opacity-70 hover:opacity-100",
-              "px-4 py-2"
-            )}
-          >
-            TOGGLE__
-          </a>
-          {/* <a
-            href="#"
+          <a 
+            href="#" 
             className={cn(
               "text-sm font-medium transition-colors",
               "hover:text-primary opacity-70 hover:opacity-100"
             )}
           >
             Documentation
-<<<<<<< HEAD
           </a>
           {isLandingPage ? (
             <>
@@ -116,9 +72,6 @@ const Header: React.FC = () => {
               </Link>
             </>
           )}
-=======
-          </a> */}
->>>>>>> 102eb995028d49674e2f5da15fe5f203bd57506d
         </nav>
       </div>
     </header>

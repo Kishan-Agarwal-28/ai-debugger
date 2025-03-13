@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Code, Zap, Lightbulb, GitCompare, Mouse, CheckCircle, ChevronRight, Terminal } from 'lucide-react';
@@ -243,21 +242,5 @@ const LandingPage = () => {
     </div>
   );
 };
-=======
-import Header from "@/components/Header";
-import Landing from "@/components/landing_page/Landing";
-import AboutBox from "@/components/landing_page/AboutBox";
-import AboutContainer from "@/components/landing_page/AboutContainer";
-
-function LandingPage(): JSX.Element {
-  return (
-    <section className="w-screen h-screen flex flex-col items-center">
-      <Header />
-      <Landing />
-      <AboutContainer />
-    </section>
-  );
-}
->>>>>>> 102eb995028d49674e2f5da15fe5f203bd57506d
 
 export default LandingPage;

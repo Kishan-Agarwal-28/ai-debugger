@@ -25,7 +25,7 @@ const getDataFromLLM = async (code, action, error) => {
 
       Edge Cases and Testing: Comment on whether the code handles edge cases appropriately. If testing or error handling is missing, mention that and suggest improvements.
 
-      Once you've analyzed the code, provide a conclusion summarizing the key points, including any strengths or weaknesses of the code. Feel free to include any additional insights or recommendations you think are relevant.
+      Once you've analyzed the code, provide a conclusion summarizing the key points, including any strengths or weaknesses of the code. Feel free to include any additional insights or recommendations you think are relevant. also provide me the link to the resources you referred in giving the response and the one i can reffer to study more about the topics
       Here is the relevant piece of code for you: `;
       break;
 
@@ -41,7 +41,7 @@ const getDataFromLLM = async (code, action, error) => {
       break;
 
     case 'explain':
-      promptPreset = `Please explain the following code in simple terms, breaking it down into key sections. Start by describing the purpose of the code and then go step-by-step through each part, explaining what it does, how it works, and why it is necessary. Make the explanation clear and easy to understand for someone who is new to programming. Here's the code: `;
+      promptPreset = `Please explain the following code in simple terms, breaking it down into key sections. Start by describing the purpose of the code and then go step-by-step through each part, explaining what it does, how it works, and why it is necessary. Make the explanation clear and easy to understand for someone who is new to programming also provide me the link to the resources you referred in giving the response and the one i can reffer to study more about the topics. Here's the code: `;
       break;
 
     default:

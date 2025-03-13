@@ -140,7 +140,7 @@ const DrawingBoard: React.FC<DrawingBoardProps> = ({
                 viewBackgroundColor: "#ffffff",
               },
             }}
-            theme="light"
+            theme="dark"
             UIOptions={{
               canvasActions: {
                 loadScene: false,

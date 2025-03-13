@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import ReactMarkdown from 'react-markdown';
 
 type TabType = 'code' | 'notes' | 'drawing' | 'output';
 
@@ -140,7 +141,6 @@ const Index = () => {
       return;
     }
     
-    console.log(`Starting ${activeOption} operation...`);
     setIsAnalyzing(true);
     setError('');
     setExplanation('');
@@ -152,14 +152,25 @@ const Index = () => {
         action: activeOption,
         error: ''
       };
-      console.log('Sending request:', request);
       
-      await socketService.processCode(request);
-      toast.success(`${activeOption} request sent successfully`);
+      // Add error handling for the response
+      const response = await socketService.processCode(request);
+      console.log('Response received:', response);
+      
+      if (typeof response === 'string') {
+        setExplanation(response);
+      } else if (response?.status === 'success') {
+        setExplanation(response.data || 'No explanation provided');
+      } else {
+        throw new Error(response?.message || 'Failed to process code');
+      }
+      
+      toast.success(`${activeOption} completed successfully`);
     } catch (err) {
       console.error(`${activeOption} error:`, err);
       setError(typeof err === 'string' ? err : `An error occurred during ${activeOption}`);
       toast.error(`${activeOption} failed`);
+    } finally {
       setIsAnalyzing(false);
     }
   }, [code, activeOption]);
@@ -308,9 +319,21 @@ const Index = () => {
                           <div className="p-4">
                             <div className="prose prose-invert max-w-none">
                               <h3 className="text-lg font-medium mb-4">Analysis Results</h3>
-                              <pre className="whitespace-pre-wrap text-sm font-mono bg-editor-darker p-4 rounded-lg">
+                              <ReactMarkdown
+                                components={{
+                                  p: ({node, ...props}) => <p className="markdown-content" {...props} />,
+                                  h1: ({node, ...props}) => <h1 className="markdown-content" {...props} />,
+                                  h2: ({node, ...props}) => <h2 className="markdown-content" {...props} />,
+                                  h3: ({node, ...props}) => <h3 className="markdown-content" {...props} />,
+                                  code: ({node, ...props}) => <code className="markdown-content" {...props} />,
+                                  pre: ({node, ...props}) => <pre className="markdown-content" {...props} />,
+                                  ul: ({node, ...props}) => <ul className="markdown-content" {...props} />,
+                                  ol: ({node, ...props}) => <ol className="markdown-content" {...props} />,
+                                  blockquote: ({node, ...props}) => <blockquote className="markdown-content" {...props} />
+                                }}
+                              >
                                 {explanation}
-                              </pre>
+                              </ReactMarkdown>
                             </div>
                           </div>
                           {optimizedCode && (
@@ -329,9 +352,21 @@ const Index = () => {
                       ) : activeOption === 'explain' && explanation ? (
                         <div className="p-4 h-full overflow-auto">
                           <div className="prose prose-invert max-w-none">
-                            <pre className="whitespace-pre-wrap text-sm font-mono bg-editor-darker p-4 rounded-lg">
+                            <ReactMarkdown
+                              components={{
+                                p: ({node, ...props}) => <p className="markdown-content" {...props} />,
+                                h1: ({node, ...props}) => <h1 className="markdown-content" {...props} />,
+                                h2: ({node, ...props}) => <h2 className="markdown-content" {...props} />,
+                                h3: ({node, ...props}) => <h3 className="markdown-content" {...props} />,
+                                code: ({node, ...props}) => <code className="markdown-content" {...props} />,
+                                pre: ({node, ...props}) => <pre className="markdown-content" {...props} />,
+                                ul: ({node, ...props}) => <ul className="markdown-content" {...props} />,
+                                ol: ({node, ...props}) => <ol className="markdown-content" {...props} />,
+                                blockquote: ({node, ...props}) => <blockquote className="markdown-content" {...props} />
+                              }}
+                            >
                               {explanation}
-                            </pre>
+                            </ReactMarkdown>
                           </div>
                         </div>
                       ) : (activeOption === 'analyze' || activeOption === 'refactor') && optimizedCode ? (
